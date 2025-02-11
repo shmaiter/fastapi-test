@@ -47,6 +47,15 @@ def update_item(item_id: int, item: Item):
     fake_db[item_id] = item
     return {"message": "Elemento actualizado correctamente.", "item": item}
 
+# DELETE: Deletes an item
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int):
+    if item_id not in fake_db:
+        raise HTTPException(status_code=404, detail="El elemento no existe.")
+    del fake_db[item_id]
+    return {"message": "Elemento eliminado correctamente."}
+
+# ---------------------------------------------------------------------------------------
 
 # GET: Returns welcome msj
 @app.get("/")
