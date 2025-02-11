@@ -5,7 +5,8 @@ from pydantic import BaseModel
 app = FastAPI()
 
 # Fake database in memory (for testing purposes)
-fake_db = {}
+fake_db = {
+}
 
 # Pydantic model for Item
 class Item(BaseModel):
@@ -37,6 +38,15 @@ def create_item(item: Item):
         raise HTTPException(status_code=400, detail="El elemento ya existe.")
     fake_db[item.id] = item
     return {"message": "Elemento creado correctamente.", "item": item}
+
+# PUT: Updates an item
+@app.put("/items/{item_id}")
+def update_item(item_id: int, item: Item):
+    if item_id not in fake_db:
+        raise HTTPException(status_code=404, detail="El elemento no existe.")
+    fake_db[item_id] = item
+    return {"message": "Elemento actualizado correctamente.", "item": item}
+
 
 # GET: Returns welcome msj
 @app.get("/")
