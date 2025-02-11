@@ -16,7 +16,19 @@ class Item(BaseModel):
 
 # ------------------------------------ CRUD Operations ---------------------------------
 
+# GET: Returns all items
+@app.get("/items")
+def read_items():
+    if not fake_db:
+        return {"message": "No hay items en la base de datos."}
+    return fake_db
 
+# GET: Returns item by id
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    if item_id not in fake_db:
+        raise HTTPException(status_code=404, detail="El elemento no existe.")
+    return fake_db[item_id]
 
 # POST: Creates a new item
 @app.post("/items")
